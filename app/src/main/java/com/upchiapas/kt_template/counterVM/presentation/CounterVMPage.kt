@@ -1,4 +1,4 @@
-package com.upchiapas.kt_template.counter
+package com.upchiapas.kt_template.counterVM.presentation
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,17 +13,17 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CounterPage() {
-    var counter by rememberSaveable {mutableIntStateOf(0)}
+fun CounterVMPage(viewModel: CounterViewModel = viewModel()) {
+    val counter by  viewModel.counter.collectAsStateWithLifecycle()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -36,7 +36,7 @@ fun CounterPage() {
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { counter++ }) {
+                onClick = { viewModel.increment()}) {
                 Text("+")
             }
         }
@@ -49,7 +49,7 @@ fun CounterPage() {
         ){
             Text("${counter}",
                 style = MaterialTheme.typography.displayMedium
-             )
+            )
         }
     }
 }
